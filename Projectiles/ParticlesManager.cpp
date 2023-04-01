@@ -9,14 +9,21 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow) {
 	attractor.x = 100.f;
 	attractor.y = 100.f;
 
+	dmin = 100;
+	dmax = 150;
+
+	attractVel = 5.0;
+
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		sf::CircleShape* particle = new sf::CircleShape;
+		mass.push_back(std::max(MIN_PARTICLE_MASS, (rand() % MAX_PARTICLE_MASS)));
 		particle->setRadius(5.f);
-		particle->setPosition((float)(rand() % mWindow.getSize().x), (float)(rand() % mWindow.getSize().x));
-		particle->setFillColor(sf::Color::Cyan);
+		particle->setPosition(rand() % mWindow.getSize().x, rand() % mWindow.getSize().y);
+
+		particle->setFillColor(sf::Color(rand() % 255, rand() % 255, rand() % 255));
+
 
 		particles.push_back(particle);
-		mass.push_back((rand() % 10) + 1);
 		velocity.push_back(sf::Vector2f(0.f, 0.f));
 	}
 }
@@ -25,29 +32,34 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow) {
 
 void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 	for (int i = 0; i < NUM_PARTICLES; i++) {
-		for (int j = 0; j < NUM_PARTICLES; j++) {
-			if (i == j) continue;
-			sf::Vector2f pos1 = particles[i]->getPosition(), pos2 = particles[j]->getPosition();
-			float d = std::max(0.1, std::sqrt(std::pow(pos1.x - pos2.x, 2) + std::pow(pos1.y - pos2.y, 2)));
-			float F = mass[i] * mass[j] / d;
-			float a = F / mass[i];
-			float dv = a * 0.1;
+		sf::Vector2f pos1 = particles[i]->getPosition();
+		sf::Vector2i pos2 = sf::Mouse::getPosition(mWindow);
+		float d = std::sqrt(std::pow(pos1.x - pos2.x, 2) + std::pow(pos1.y - pos2.y, 2));
+		d = std::max(d, dmin);
+		d = std::min(d, dmax);
+		float F = 0.5 * mass[i] * ATTRACTION_MASS / (d * d);
+		float a = F / mass[i];
+		float dv = a;
 
-			if (pos1.x > pos2.x) {
-				velocity[i].x -= dv;
-			}
-			else {
-				velocity[i].x += dv;
-			}
+		sf::Vector2f movement(0.f, 0.f);
 
-			if (pos1.y > pos2.y) {
-				velocity[i].y -= dv;
-			}
-			else {
-				velocity[i].y += dv;
-			}
+		if (pos1.x > pos2.x) {
+			movement.x = -0.1f;
+		}
+		else {
+			movement.x = 0.1f;
 		}
 
+		if (pos1.y > pos2.y) {
+			movement.y = -0.1f;
+		}
+		else {
+			movement.y = 0.1f;
+		}
+
+		movement *= dv;
+
+		velocity[i] += movement;
 	}
 
 
@@ -55,10 +67,37 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 
 
 void ParticlesManager::drawParticles(sf::RenderWindow& mWindow) {
+	sf::Vector2u winSize = mWindow.getSize();
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		particles[i]->move(velocity[i]);
 	}
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		mWindow.draw(*particles[i]);
+	}
+}
+
+
+
+
+void ParticlesManager::attract(sf::RenderWindow& mWindow) {
+	for (int i = 0; i < NUM_PARTICLES; i++) {
+		sf::Vector2f movement(0.f, 0.f);
+		sf::Vector2i mosPos = sf::Mouse::getPosition(mWindow);
+
+		if (particles[i]->getPosition().x > mosPos.x) {
+			movement.x = -attractVel;
+		}
+		else {
+			movement.x = attractVel;
+		}
+
+		if (particles[i]->getPosition().y > mosPos.y) {
+			movement.y = -attractVel;
+		}
+		else {
+			movement.y = attractVel;
+		}
+
+		particles[i]->move(movement);
 	}
 }
