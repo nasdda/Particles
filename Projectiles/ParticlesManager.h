@@ -12,9 +12,8 @@ public:
 private:
 	std::vector<sf::CircleShape*> particles;
 	sf::Vector2f attractor;
-	std::vector<float> velocity;
 	std::vector<int> mass;
-	std::vector<sf::Vector2f> delta;
+	std::vector<sf::Vector2f> velocity;
 
 private:
 

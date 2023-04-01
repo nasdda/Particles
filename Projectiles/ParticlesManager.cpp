@@ -16,9 +16,8 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow) {
 		particle->setFillColor(sf::Color::Cyan);
 
 		particles.push_back(particle);
-		velocity.push_back(0.f);
 		mass.push_back((rand() % 10) + 1);
-		delta.push_back(sf::Vector2f(0.f, 0.f));
+		velocity.push_back(sf::Vector2f(0.f, 0.f));
 	}
 }
 
@@ -29,32 +28,35 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 		for (int j = 0; j < NUM_PARTICLES; j++) {
 			if (i == j) continue;
 			sf::Vector2f pos1 = particles[i]->getPosition(), pos2 = particles[j]->getPosition();
-			float d = std::max(0.01, std::sqrt(std::pow(pos1.x - pos2.x, 2) + std::pow(pos1.y - pos2.y, 2)));
+			float d = std::max(0.1, std::sqrt(std::pow(pos1.x - pos2.x, 2) + std::pow(pos1.y - pos2.y, 2)));
 			float F = mass[i] * mass[j] / d;
 			float a = F / mass[i];
-			float dv = a * 0.2;
+			float dv = a * 0.1;
 
 			if (pos1.x > pos2.x) {
-				delta[i].x -= dv;
+				velocity[i].x -= dv;
 			}
 			else {
-				delta[i].x += dv;
+				velocity[i].x += dv;
 			}
 
 			if (pos1.y > pos2.y) {
-				delta[i].y -= dv;
+				velocity[i].y -= dv;
 			}
 			else {
-				delta[i].y += dv;
+				velocity[i].y += dv;
 			}
 		}
+
 	}
+
+
 }
 
 
 void ParticlesManager::drawParticles(sf::RenderWindow& mWindow) {
 	for (int i = 0; i < NUM_PARTICLES; i++) {
-		particles[i]->move(delta[i]);
+		particles[i]->move(velocity[i]);
 	}
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		mWindow.draw(*particles[i]);
