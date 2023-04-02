@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#define NUM_PARTICLES 300
-#define ATTRACTION_MASS 500000
+#define NUM_PARTICLES 20
+#define ATTRACTION_MASS 0
 #define MAX_PARTICLE_MASS 50
 #define MIN_PARTICLE_MASS 20
 
@@ -23,6 +23,6 @@ private:
 	std::vector<int> mass;
 	std::vector<sf::Vector2f> velocity;
 
-private:
-
 };
+
+

@@ -18,6 +18,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ConfigManager.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="ParticlesManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

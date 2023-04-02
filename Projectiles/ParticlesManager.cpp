@@ -3,14 +3,12 @@
 
 
 
-
-
 ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow) {
 	attractor.x = 100.f;
 	attractor.y = 100.f;
 
-	dmin = 100;
-	dmax = 150;
+	dmin = 200;
+	dmax = 250;
 
 	attractVel = 5.0;
 
