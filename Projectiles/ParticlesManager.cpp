@@ -1,5 +1,8 @@
 #include <SFML/Graphics.hpp>
+
+#ifndef ParticlesManager
 #include "ParticlesManager.h"
+#endif
 
 
 
@@ -32,30 +35,33 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		sf::Vector2f pos1 = particles[i]->getPosition();
 		sf::Vector2i pos2 = sf::Mouse::getPosition(mWindow);
-		float d = std::sqrt(std::pow(pos1.x - pos2.x, 2) + std::pow(pos1.y - pos2.y, 2));
+		float dx = std::abs(pos1.x - pos2.x), dy = std::abs(pos1.y - pos2.y);
+		float d = std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
 		d = std::max(d, dmin);
 		d = std::min(d, dmax);
 		float F = 0.5 * mass[i] * ATTRACTION_MASS / (d * d);
 		float a = F / mass[i];
 		float dv = a;
 
+		float tot = dx + dy;
+
 		sf::Vector2f movement(0.f, 0.f);
 
 		if (pos1.x > pos2.x) {
-			movement.x = -0.1f;
+			movement.x = -(dx / tot) * dv;
 		}
 		else {
-			movement.x = 0.1f;
+			movement.x = (dx / tot) * dv;
 		}
 
 		if (pos1.y > pos2.y) {
-			movement.y = -0.1f;
+			movement.y = -(dy / tot) * dv;
 		}
 		else {
-			movement.y = 0.1f;
+			movement.y = (dy / tot) * dv;
 		}
 
-		movement *= dv;
+		//movement *= dv;
 
 		velocity[i] += movement;
 	}

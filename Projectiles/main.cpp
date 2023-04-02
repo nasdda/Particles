@@ -1,7 +1,10 @@
 #include <SFML/Graphics.hpp>
-#include <vector>
+#include <iostream>
 #include "ParticlesManager.h"
+#ifndef ConfigManager
 #include "ConfigManager.h"
+#endif
+
 
 class Game
 {
@@ -24,7 +27,7 @@ private:
 	sf::Vector2f attractor;
 
 	ParticlesManager* pm;
-	ConfigManager* cui;
+	ConfigManager* cm;
 
 private:
 	sf::RenderWindow mWindow;
@@ -34,7 +37,7 @@ private:
 Game::Game() : mWindow(sf::VideoMode(1900, 1200), "SFML Application"), mPlayer()
 {
 	pm = new ParticlesManager(mWindow);
-	cui = new ConfigManager(mWindow);
+	cm = new ConfigManager(mWindow);
 	mWindow.setFramerateLimit(60);
 }
 
@@ -47,6 +50,7 @@ void Game::run()
 		processEvents();
 		update();
 		pm->updatePositions(mWindow);
+		cm->updateCirclePosition(mWindow);
 		render();
 	}
 }
@@ -74,6 +78,13 @@ void Game::processEvents()
 void Game::handlePlayerInput(bool isPressed)
 {
 	pressed = isPressed;
+
+	if (isPressed) {
+		cm->handleMousePress(mWindow);
+	}
+	else {
+		cm->handleMouseRelease();
+	}
 }
 
 
@@ -88,7 +99,7 @@ void Game::render()
 {
 	mWindow.clear(sf::Color::White);
 	pm->drawParticles(mWindow);
-	cui->drawSliders(mWindow);
+	cm->drawSliders(mWindow);
 	mWindow.display();
 }
 

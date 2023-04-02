@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #define NUM_PARTICLES 20
-#define ATTRACTION_MASS 0
+#define ATTRACTION_MASS 50000
 #define MAX_PARTICLE_MASS 50
 #define MIN_PARTICLE_MASS 20
 
