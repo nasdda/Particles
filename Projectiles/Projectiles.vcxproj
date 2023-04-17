@@ -24,6 +24,7 @@
     <ProjectGuid>{40ee32e3-8f45-42dd-858c-cbb6601bff18}</ProjectGuid>
     <RootNamespace>Projectiles</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Particles</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
