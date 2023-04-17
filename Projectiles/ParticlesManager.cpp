@@ -6,14 +6,14 @@
 
 
 
-ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow) {
+ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* confManager) {
+
+	cm = confManager;
+
 	attractor.x = 100.f;
 	attractor.y = 100.f;
-
-	dmin = 200;
-	dmax = 250;
-
 	attractVel = 5.0;
+	paused = false;
 
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		sf::CircleShape* particle = new sf::CircleShape;
@@ -32,14 +32,16 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow) {
 
 
 void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
+	if (paused) return;
+
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		sf::Vector2f pos1 = particles[i]->getPosition();
 		sf::Vector2i pos2 = sf::Mouse::getPosition(mWindow);
 		float dx = std::abs(pos1.x - pos2.x), dy = std::abs(pos1.y - pos2.y);
 		float d = std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
-		d = std::max(d, dmin);
-		d = std::min(d, dmax);
-		float F = 0.5 * mass[i] * ATTRACTION_MASS / (d * d);
+		d = std::max(d, cm->minD);
+		d = std::min(d, cm->maxD);
+		float F = 0.5 * mass[i] * cm->mouseMass / (d * d);
 		float a = F / mass[i];
 		float dv = a;
 
@@ -61,8 +63,6 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 			movement.y = (dy / tot) * dv;
 		}
 
-		//movement *= dv;
-
 		velocity[i] += movement;
 	}
 
@@ -71,10 +71,13 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 
 
 void ParticlesManager::drawParticles(sf::RenderWindow& mWindow) {
-	sf::Vector2u winSize = mWindow.getSize();
-	for (int i = 0; i < NUM_PARTICLES; i++) {
-		particles[i]->move(velocity[i]);
+	if (!paused) {
+		sf::Vector2u winSize = mWindow.getSize();
+		for (int i = 0; i < NUM_PARTICLES; i++) {
+			particles[i]->move(velocity[i]);
+		}
 	}
+	
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		mWindow.draw(*particles[i]);
 	}
@@ -84,6 +87,8 @@ void ParticlesManager::drawParticles(sf::RenderWindow& mWindow) {
 
 
 void ParticlesManager::attract(sf::RenderWindow& mWindow) {
+	if (paused) return;
+
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		sf::Vector2f movement(0.f, 0.f);
 		sf::Vector2i mosPos = sf::Mouse::getPosition(mWindow);
@@ -104,4 +109,10 @@ void ParticlesManager::attract(sf::RenderWindow& mWindow) {
 
 		particles[i]->move(movement);
 	}
+}
+
+
+
+void ParticlesManager::pause() {
+	paused = !paused;
 }

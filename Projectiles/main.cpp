@@ -15,7 +15,7 @@ private:
 	void processEvents();
 	void update();
 	void render();
-	void handlePlayerInput(bool isPressed);
+	void handlePlayerInput(sf::Event event);
 	bool mIsMovingUp = false;
 	bool mIsMovingDown = false;
 	bool mIsMovingLeft = false;
@@ -36,8 +36,8 @@ private:
 
 Game::Game() : mWindow(sf::VideoMode(1900, 1200), "SFML Application"), mPlayer()
 {
-	pm = new ParticlesManager(mWindow);
 	cm = new ConfigManager(mWindow);
+	pm = new ParticlesManager(mWindow, cm);
 	mWindow.setFramerateLimit(60);
 }
 
@@ -60,30 +60,30 @@ void Game::processEvents()
 	sf::Event event;
 	while (mWindow.pollEvent(event))
 	{
-		switch (event.type)
-		{
-		case sf::Event::MouseButtonPressed:
-			handlePlayerInput(true);
-			break;
-		case sf::Event::MouseButtonReleased:
-			handlePlayerInput(false);
-			break;
-		case sf::Event::Closed:
-			mWindow.close();
-			break;
-		}
+		handlePlayerInput(event);
 	}
 }
 
-void Game::handlePlayerInput(bool isPressed)
+void Game::handlePlayerInput(sf::Event event)
 {
-	pressed = isPressed;
-
-	if (isPressed) {
+	switch (event.type)
+	{
+	case sf::Event::MouseButtonPressed:
+		pressed = true;
 		cm->handleMousePress(mWindow);
-	}
-	else {
+		break;
+	case sf::Event::MouseButtonReleased:
+		pressed = false;
 		cm->handleMouseRelease();
+		break;
+	case sf::Event::KeyPressed:
+		if (event.key.code == sf::Keyboard::Space) {
+			pm->pause();
+		}
+		break;
+	case sf::Event::Closed:
+		mWindow.close();
+		break;
 	}
 }
 
