@@ -5,7 +5,7 @@
 #endif
 
 
-#define NUM_PARTICLES 10
+#define NUM_PARTICLES 1000
 //#define ATTRACTION_MASS 50000
 #define MAX_PARTICLE_MASS 50
 #define MIN_PARTICLE_MASS 20

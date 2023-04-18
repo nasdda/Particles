@@ -14,7 +14,7 @@ LINE_HEIGHT
 // Slider
 #define STARTING_X 20
 #define LINE_HEIGHT 6 
-#define LINE_WIDTH 300
+#define LINE_WIDTH 400
 #define MARGIN_Y 60
 
 #define MOUSE_MASS_MAX 100000

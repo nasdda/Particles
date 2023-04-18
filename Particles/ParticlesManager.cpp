@@ -45,22 +45,25 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 		float a = F / mass[i];
 		float dv = a;
 
-		float tot = dx + dy;
+		float tot = dx + dy; // Ver 1
+		float rX = (dx / tot);
+		float rY = (dy / tot);
+
 
 		sf::Vector2f movement(0.f, 0.f);
 
 		if (pos1.x > pos2.x) {
-			movement.x = -(dx / tot) * dv;
+			movement.x = -rX * dv;
 		}
 		else {
-			movement.x = (dx / tot) * dv;
+			movement.x = rX * dv;
 		}
 
 		if (pos1.y > pos2.y) {
-			movement.y = -(dy / tot) * dv;
+			movement.y = -rY * dv;
 		}
 		else {
-			movement.y = (dy / tot) * dv;
+			movement.y = rY * dv;
 		}
 
 		velocity[i] += movement;
@@ -93,18 +96,27 @@ void ParticlesManager::attract(sf::RenderWindow& mWindow) {
 		sf::Vector2f movement(0.f, 0.f);
 		sf::Vector2i mosPos = sf::Mouse::getPosition(mWindow);
 
+		sf::Vector2f pos = particles[i]->getPosition();
+
+		float dx = std::abs(pos.x - mosPos.x), dy = std::abs(pos.y - mosPos.y);
+		float d = std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
+		float tot = dx + dy;
+		float rX = dx / tot;
+		float rY = dy / tot;
+
+
 		if (particles[i]->getPosition().x > mosPos.x) {
-			movement.x = -attractVel;
+			movement.x = -attractVel * rX;
 		}
 		else {
-			movement.x = attractVel;
+			movement.x = attractVel * rX;
 		}
 
 		if (particles[i]->getPosition().y > mosPos.y) {
-			movement.y = -attractVel;
+			movement.y = -attractVel * rY;
 		}
 		else {
-			movement.y = attractVel;
+			movement.y = attractVel * rY;
 		}
 
 		particles[i]->move(movement);
