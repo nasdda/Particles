@@ -41,15 +41,18 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 	mouseMass = 20000;
 	minD = 170;
 	maxD = 200;
+	attractVel = 5.0;
 
 	ratios[0] = (float) mouseMass / MOUSE_MASS_MAX;
 	ratios[1] = (float) minD / RANGE_MAX_D;
 	ratios[2] = (float) maxD / RANGE_MAX_D;
+	ratios[3] = (float) attractVel / ATTRACT_VEL_MAX;
 
 	// Update to resolve rounding errors
 	mouseMass = getRatioValue(ratios[0], MOUSE_MASS_MIN, MOUSE_MASS_MAX);
 	minD = getRatioValue(ratios[1], RANGE_MIN_D, RANGE_MAX_D);
 	maxD = getRatioValue(ratios[2], RANGE_MIN_D, RANGE_MAX_D);
+	attractVel = getRatioValue(ratios[3], ATTRACT_VEL_MIN, ATTRACT_VEL_MAX);
 
 	std::cout << ratios[0] << std::endl;
 
@@ -71,12 +74,8 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 		texts[i].setCharacterSize(CONFIG_FONT_SIZE);
 		texts[i].setPosition(STARTING_X, i * MARGIN_Y + (MARGIN_Y - 40));
 	}
-
 	
-	texts[0].setString(string_format("Mouse Mass: %d", mouseMass));
-	texts[1].setString(string_format("Min D: %.2f", minD));
-	texts[2].setString(string_format("Max D: %.2f", maxD));
-
+	updateTexts();
 }
 
 
@@ -135,9 +134,16 @@ void ConfigManager::updateCirclePosition(sf::RenderWindow& mWindow) {
 	minD = std::min(minD, maxD);
 	maxD = getRatioValue(ratios[2], RANGE_MIN_D, RANGE_MAX_D);
 	maxD = std::max(minD, maxD);
+	attractVel = getRatioValue(ratios[3], ATTRACT_VEL_MIN, ATTRACT_VEL_MAX);
 
+	updateTexts();
+}
+
+
+
+void ConfigManager::updateTexts() {
 	texts[0].setString(string_format("Mouse Mass: %d", mouseMass));
 	texts[1].setString(string_format("Min D: %.2f", minD));
 	texts[2].setString(string_format("Max D: %.2f", maxD));
+	texts[3].setString(string_format("Left-click Attraction: %.2f", attractVel));
 }
-

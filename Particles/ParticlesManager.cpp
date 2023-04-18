@@ -12,7 +12,7 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* con
 
 	attractor.x = 100.f;
 	attractor.y = 100.f;
-	attractVel = 5.0;
+	/*attractVel = 5.0;*/
 	paused = false;
 
 	for (int i = 0; i < NUM_PARTICLES; i++) {
@@ -46,9 +46,8 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 		float dv = a;
 
 		float tot = dx + dy; // Ver 1
-		float rX = (dx / tot);
-		float rY = (dy / tot);
-
+		float rX = dx / tot;
+		float rY = dy / tot;
 
 		sf::Vector2f movement(0.f, 0.f);
 
@@ -106,17 +105,17 @@ void ParticlesManager::attract(sf::RenderWindow& mWindow) {
 
 
 		if (particles[i]->getPosition().x > mosPos.x) {
-			movement.x = -attractVel * rX;
+			movement.x = -cm->attractVel * rX;
 		}
 		else {
-			movement.x = attractVel * rX;
+			movement.x = cm->attractVel * rX;
 		}
 
 		if (particles[i]->getPosition().y > mosPos.y) {
-			movement.y = -attractVel * rY;
+			movement.y = -cm->attractVel * rY;
 		}
 		else {
-			movement.y = attractVel * rY;
+			movement.y = cm->attractVel * rY;
 		}
 
 		particles[i]->move(movement);

@@ -8,7 +8,7 @@ CIRCLE_RADIUS
 LINE_HEIGHT
 */
 
-#define NUM_OPTIONS 3
+#define NUM_OPTIONS 4
 #define CIRCLE_RADIUS 10
 
 // Slider
@@ -23,6 +23,9 @@ LINE_HEIGHT
 #define RANGE_MAX_D 600
 #define RANGE_MIN_D 1
 
+#define ATTRACT_VEL_MAX 50
+#define ATTRACT_VEL_MIN 0
+
 #define CONFIG_FONT_SIZE 24
 
 
@@ -36,12 +39,14 @@ public:
 	void updateCirclePosition(sf::RenderWindow& mWindow);
 	int mouseMass;
 	float minD, maxD;
+	float attractVel;
 private:
 	sf::RectangleShape lines[NUM_OPTIONS];
 	sf::CircleShape circles[NUM_OPTIONS];
 	int clickedCircle; // -1 if no circles clicked
 	sf::Text texts[NUM_OPTIONS];
 	float ratios[NUM_OPTIONS];
+	void updateTexts();
 };
 
 
