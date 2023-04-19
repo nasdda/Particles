@@ -1,9 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "ParticlesManager.h"
-#ifndef ConfigManager
 #include "ConfigManager.h"
-#endif
 
 
 class Game

@@ -1,8 +1,6 @@
 #include <SFML/Graphics.hpp>
 
-#ifndef ParticlesManager
 #include "ParticlesManager.h"
-#endif
 
 
 
@@ -22,7 +20,6 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* con
 		particle->setPosition(rand() % mWindow.getSize().x, rand() % mWindow.getSize().y);
 
 		particle->setFillColor(sf::Color(rand() % 255, rand() % 255, rand() % 255));
-
 
 		particles.push_back(particle);
 		velocity.push_back(sf::Vector2f(0.f, 0.f));
@@ -45,7 +42,7 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 		float a = F / mass[i];
 		float dv = a;
 
-		float tot = dx + dy; 
+		float tot = dx + dy;
 		// Replace tot with d or vice versa to have different attraction behavior
 		float rX = dx / tot;
 		float rY = dy / tot;
@@ -80,7 +77,7 @@ void ParticlesManager::drawParticles(sf::RenderWindow& mWindow) {
 			particles[i]->move(velocity[i]);
 		}
 	}
-	
+
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		mWindow.draw(*particles[i]);
 	}

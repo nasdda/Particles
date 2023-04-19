@@ -4,9 +4,7 @@
 #include <string>
 #include <stdexcept>
 
-#ifndef ConfigManager
 #include "ConfigManager.h"
-#endif
 
 
 
@@ -56,7 +54,6 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 	maxD = getRatioValue(ratios[2], RANGE_MIN_D, RANGE_MAX_D);
 	attractVel = getRatioValue(ratios[3], ATTRACT_VEL_MIN, ATTRACT_VEL_MAX);
 
-	std::cout << ratios[0] << std::endl;
 
 	for (int i = 0; i < NUM_OPTIONS; i++) {
 		lines[i] = sf::RectangleShape(sf::Vector2f(LINE_WIDTH, LINE_HEIGHT));
@@ -79,14 +76,29 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 
 	updateTexts();
 
+	std::string buttonTextContent[2] = { "VER 1", "VER 2" };
+
 	// Buttons
 	for (int i = 0; i < NUM_VERSIONS; i++) {
+		std::cout << i << std::endl;
 		buttons[i] = sf::RectangleShape(sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT));
 		buttons[i].setPosition(sf::Vector2f(STARTING_X + (BUTTON_WIDTH + MARGIN_X) * i, NUM_OPTIONS * MARGIN_Y + MARGIN_Y));
 		buttons[i].setFillColor(sf::Color(255, 255, 255));
 		buttons[i].setOutlineThickness(2);
 		buttons[i].setOutlineColor(sf::Color(100, 100, 100));
+
+		buttonTexts[i] = sf::Text();
+		buttonTexts[i].setFont(*font);
+		buttonTexts[i].setFillColor(sf::Color::Black);
+		buttonTexts[i].setCharacterSize(CONFIG_FONT_SIZE);
+
+		buttonTexts[i].setString(buttonTextContent[i]);
+		sf::FloatRect textBounds = buttonTexts[i].getLocalBounds();
+		sf::FloatRect rectBounds = buttons[i].getLocalBounds();
+		buttonTexts[i].setOrigin(textBounds.left + textBounds.width / 2.0f, textBounds.top + textBounds.height / 2.0f);
+		buttonTexts[i].setPosition(buttons[i].getPosition().x + rectBounds.width / 2.0f, buttons[i].getPosition().y + rectBounds.height / 2.0f);
 	}
+
 
 }
 
@@ -164,7 +176,7 @@ void ConfigManager::toggleControls() {
 	show = !show;
 }
 
-void ConfigManager::setVersion(int ver) { 
+void ConfigManager::setVersion(int ver) {
 	version = ver;
 }
 
@@ -173,5 +185,6 @@ void ConfigManager::drawButtons(sf::RenderWindow& mWindow) {
 	if (!show) return;
 	for (int i = 0; i < NUM_VERSIONS; i++) {
 		mWindow.draw(buttons[i]);
+		mWindow.draw(buttonTexts[i]);
 	}
 }

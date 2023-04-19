@@ -15,8 +15,8 @@ LINE_HEIGHT
 #define LINE_HEIGHT 6 
 #define LINE_WIDTH 400
 #define MARGIN_Y 60
-#define BUTTON_HEIGHT 40 
-#define BUTTON_WIDTH 80
+#define BUTTON_HEIGHT 50
+#define BUTTON_WIDTH 110
 #define MARGIN_X 20
 
 #define MOUSE_MASS_MAX 100000
@@ -52,13 +52,14 @@ public:
 	int version;
 private:
 	sf::RectangleShape lines[NUM_OPTIONS];
-	sf::CircleShape circles[NUM_OPTIONS];
-	int clickedCircle; // -1 if no circles clicked
-	sf::Text sliderTexts[NUM_OPTIONS];
-	float ratios[NUM_OPTIONS];
-	void updateTexts();
-	bool show;
 	sf::RectangleShape buttons[NUM_VERSIONS];
+	sf::CircleShape circles[NUM_OPTIONS];
+	sf::Text sliderTexts[NUM_OPTIONS];
+	sf::Text buttonTexts[NUM_VERSIONS];
+	int clickedCircle;
+	float ratios[NUM_OPTIONS];
+	bool show;
+	void updateTexts();
 };
 
 

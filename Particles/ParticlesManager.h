@@ -1,8 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#ifndef ConfigManager
 #include "ConfigManager.h"
-#endif
 
 
 #define NUM_PARTICLES 1000
@@ -15,20 +13,19 @@ class ParticlesManager
 {
 public:
 	ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* confManager);
+	float attractVel;
+	bool isPaused();
 	void updatePositions(sf::RenderWindow& mWindow);
 	void drawParticles(sf::RenderWindow& mWindow);
-	float attractVel;
 	void attract(sf::RenderWindow& mWindow);
 	void togglePaused();
-	bool isPaused();
 private:
+	ConfigManager* cm;
+	bool paused;
 	std::vector<sf::CircleShape*> particles;
-	sf::Vector2f attractor;
 	std::vector<int> mass;
 	std::vector<sf::Vector2f> velocity;
-	ConfigManager* cm;
-
-	bool paused;
+	sf::Vector2f attractor;
 };
 
 
