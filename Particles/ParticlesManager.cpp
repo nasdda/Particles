@@ -45,7 +45,8 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 		float a = F / mass[i];
 		float dv = a;
 
-		float tot = dx + dy; // Ver 1
+		float tot = dx + dy; 
+		// Replace tot with d or vice versa to have different attraction behavior
 		float rX = dx / tot;
 		float rY = dy / tot;
 
@@ -124,6 +125,10 @@ void ParticlesManager::attract(sf::RenderWindow& mWindow) {
 
 
 
-void ParticlesManager::pause() {
+void ParticlesManager::togglePaused() {
 	paused = !paused;
+}
+
+bool ParticlesManager::isPaused() {
+	return paused;
 }

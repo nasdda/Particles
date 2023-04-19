@@ -19,7 +19,8 @@ public:
 	void drawParticles(sf::RenderWindow& mWindow);
 	float attractVel;
 	void attract(sf::RenderWindow& mWindow);
-	void pause();
+	void togglePaused();
+	bool isPaused();
 private:
 	std::vector<sf::CircleShape*> particles;
 	sf::Vector2f attractor;

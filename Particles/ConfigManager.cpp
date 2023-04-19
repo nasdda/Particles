@@ -28,8 +28,10 @@ int getRatioValue(float ratio, int min, int max) {
 
 
 ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
-	
+
 	clickedCircle = -1;
+	show = false;
+	version = VER1;
 
 	sf::Font* font = new sf::Font();
 	if (!font->loadFromFile("arial.ttf"))
@@ -43,10 +45,10 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 	maxD = 200;
 	attractVel = 5.0;
 
-	ratios[0] = (float) mouseMass / MOUSE_MASS_MAX;
-	ratios[1] = (float) minD / RANGE_MAX_D;
-	ratios[2] = (float) maxD / RANGE_MAX_D;
-	ratios[3] = (float) attractVel / ATTRACT_VEL_MAX;
+	ratios[0] = (float)mouseMass / MOUSE_MASS_MAX;
+	ratios[1] = (float)minD / RANGE_MAX_D;
+	ratios[2] = (float)maxD / RANGE_MAX_D;
+	ratios[3] = (float)attractVel / ATTRACT_VEL_MAX;
 
 	// Update to resolve rounding errors
 	mouseMass = getRatioValue(ratios[0], MOUSE_MASS_MIN, MOUSE_MASS_MAX);
@@ -68,25 +70,34 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 		circles[i].setOutlineThickness(1);
 		circles[i].setOrigin(circles[i].getRadius(), circles[i].getRadius());
 
-		texts[i] = sf::Text();
-		texts[i].setFont(*font);
-		texts[i].setFillColor(sf::Color::Black);
-		texts[i].setCharacterSize(CONFIG_FONT_SIZE);
-		texts[i].setPosition(STARTING_X, i * MARGIN_Y + (MARGIN_Y - 40));
+		sliderTexts[i] = sf::Text();
+		sliderTexts[i].setFont(*font);
+		sliderTexts[i].setFillColor(sf::Color::Black);
+		sliderTexts[i].setCharacterSize(CONFIG_FONT_SIZE);
+		sliderTexts[i].setPosition(STARTING_X, i * MARGIN_Y + (MARGIN_Y - 40));
 	}
-	
+
 	updateTexts();
+
+	// Buttons
+	for (int i = 0; i < NUM_VERSIONS; i++) {
+		buttons[i] = sf::RectangleShape(sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT));
+		buttons[i].setPosition(sf::Vector2f(STARTING_X + (BUTTON_WIDTH + MARGIN_X) * i, NUM_OPTIONS * MARGIN_Y + MARGIN_Y));
+		buttons[i].setFillColor(sf::Color(255, 255, 255));
+		buttons[i].setOutlineThickness(2);
+		buttons[i].setOutlineColor(sf::Color(100, 100, 100));
+	}
+
 }
 
 
 void ConfigManager::drawSliders(sf::RenderWindow& mWindow) {
-
+	if (!show) return;
 	for (int i = 0; i < NUM_OPTIONS; i++) {
-		mWindow.draw(texts[i]);
+		mWindow.draw(sliderTexts[i]);
 		mWindow.draw(lines[i]);
 		mWindow.draw(circles[i]);
 	}
-
 }
 
 bool inCircle(sf::CircleShape& circle, sf::Vector2i& mPos) {
@@ -96,6 +107,8 @@ bool inCircle(sf::CircleShape& circle, sf::Vector2i& mPos) {
 }
 
 void ConfigManager::handleMousePress(sf::RenderWindow& mWindow) {
+	if (!show) return;
+
 	sf::Vector2i mPos = sf::Mouse::getPosition(mWindow);
 
 	for (int i = 0; i < NUM_OPTIONS; i++) {
@@ -140,10 +153,25 @@ void ConfigManager::updateCirclePosition(sf::RenderWindow& mWindow) {
 }
 
 
-
 void ConfigManager::updateTexts() {
-	texts[0].setString(string_format("Mouse Mass: %d", mouseMass));
-	texts[1].setString(string_format("Min D: %.2f", minD));
-	texts[2].setString(string_format("Max D: %.2f", maxD));
-	texts[3].setString(string_format("Left-click Attraction: %.2f", attractVel));
+	sliderTexts[0].setString(string_format("Mouse Mass: %d", mouseMass));
+	sliderTexts[1].setString(string_format("Min D: %.2f", minD));
+	sliderTexts[2].setString(string_format("Max D: %.2f", maxD));
+	sliderTexts[3].setString(string_format("Left-Click Attraction: %.2f", attractVel));
+}
+
+void ConfigManager::toggleControls() {
+	show = !show;
+}
+
+void ConfigManager::setVersion(int ver) { 
+	version = ver;
+}
+
+
+void ConfigManager::drawButtons(sf::RenderWindow& mWindow) {
+	if (!show) return;
+	for (int i = 0; i < NUM_VERSIONS; i++) {
+		mWindow.draw(buttons[i]);
+	}
 }

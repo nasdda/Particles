@@ -78,7 +78,8 @@ void Game::handlePlayerInput(sf::Event event)
 		break;
 	case sf::Event::KeyPressed:
 		if (event.key.code == sf::Keyboard::Space) {
-			pm->pause();
+			pm->togglePaused();
+			cm->toggleControls();
 		}
 		break;
 	case sf::Event::Closed:
@@ -100,6 +101,7 @@ void Game::render()
 	mWindow.clear(sf::Color::White);
 	pm->drawParticles(mWindow);
 	cm->drawSliders(mWindow);
+	cm->drawButtons(mWindow);
 	mWindow.display();
 }
 
