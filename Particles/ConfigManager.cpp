@@ -28,7 +28,7 @@ int getRatioValue(float ratio, int min, int max) {
 ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 
 	clickedCircle = -1;
-	show = false;
+	hide = true;
 	version = VER1;
 
 	sf::Font* font = new sf::Font();
@@ -104,7 +104,7 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 
 
 void ConfigManager::drawSliders(sf::RenderWindow& mWindow) {
-	if (!show) return;
+	if (hide) return;
 	for (int i = 0; i < NUM_OPTIONS; i++) {
 		mWindow.draw(sliderTexts[i]);
 		mWindow.draw(lines[i]);
@@ -119,7 +119,7 @@ bool inCircle(sf::CircleShape& circle, sf::Vector2i& mPos) {
 }
 
 void ConfigManager::handleMousePress(sf::RenderWindow& mWindow) {
-	if (!show) return;
+	if (hide) return;
 
 	sf::Vector2i mPos = sf::Mouse::getPosition(mWindow);
 
@@ -173,7 +173,7 @@ void ConfigManager::updateTexts() {
 }
 
 void ConfigManager::toggleControls() {
-	show = !show;
+	hide = !hide;
 }
 
 void ConfigManager::setVersion(int ver) {
@@ -182,7 +182,7 @@ void ConfigManager::setVersion(int ver) {
 
 
 void ConfigManager::drawButtons(sf::RenderWindow& mWindow) {
-	if (!show) return;
+	if (hide) return;
 	for (int i = 0; i < NUM_VERSIONS; i++) {
 		mWindow.draw(buttons[i]);
 		mWindow.draw(buttonTexts[i]);

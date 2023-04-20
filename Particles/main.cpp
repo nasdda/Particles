@@ -4,10 +4,10 @@
 #include "ConfigManager.h"
 
 
-class Game
+class Particles
 {
 public:
-	Game();
+	Particles();
 	void run();
 private:
 	void processEvents();
@@ -32,14 +32,14 @@ private:
 	sf::CircleShape mPlayer;
 };
 
-Game::Game() : mWindow(sf::VideoMode(1900, 1200), "SFML Application"), mPlayer()
+Particles::Particles() : mWindow(sf::VideoMode(1900, 1200), "SFML Application"), mPlayer()
 {
 	cm = new ConfigManager(mWindow);
 	pm = new ParticlesManager(mWindow, cm);
 	mWindow.setFramerateLimit(60);
 }
 
-void Game::run()
+void Particles::run()
 {
 	sf::Clock clock;
 	while (mWindow.isOpen())
@@ -53,7 +53,7 @@ void Game::run()
 	}
 }
 
-void Game::processEvents()
+void Particles::processEvents()
 {
 	sf::Event event;
 	while (mWindow.pollEvent(event))
@@ -62,7 +62,7 @@ void Game::processEvents()
 	}
 }
 
-void Game::handlePlayerInput(sf::Event event)
+void Particles::handlePlayerInput(sf::Event event)
 {
 	switch (event.type)
 	{
@@ -87,14 +87,14 @@ void Game::handlePlayerInput(sf::Event event)
 }
 
 
-void Game::update()
+void Particles::update()
 {
 	if (pressed) {
 		pm->attract(mWindow);
 	}
 }
 
-void Game::render()
+void Particles::render()
 {
 	mWindow.clear(sf::Color::White);
 	pm->drawParticles(mWindow);
@@ -105,8 +105,8 @@ void Game::render()
 
 int main()
 {
-	Game game;
-	game.run();
+	Particles particles;
+	particles.run();
 }
 
 

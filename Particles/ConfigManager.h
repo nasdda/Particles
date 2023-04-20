@@ -58,7 +58,7 @@ private:
 	sf::Text buttonTexts[NUM_VERSIONS];
 	int clickedCircle;
 	float ratios[NUM_OPTIONS];
-	bool show;
+	bool hide;
 	void updateTexts();
 };
 
