@@ -24,12 +24,21 @@ int getRatioValue(float ratio, int min, int max) {
 	return min + add;
 }
 
+bool mouseInRectangle(const sf::RenderWindow& window, const sf::RectangleShape& rectangle) {
+	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPosition = window.mapPixelToCoords(mousePosition);
+	return rectangle.getGlobalBounds().contains(worldPosition);
+}
+
 
 ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 
 	clickedCircle = -1;
 	hide = true;
+	versions[0] = VER1;
+	versions[1] = VER2;
 	version = VER1;
+
 
 	sf::Font* font = new sf::Font();
 	if (!font->loadFromFile("arial.ttf"))
@@ -99,6 +108,8 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 		buttonTexts[i].setPosition(buttons[i].getPosition().x + rectBounds.width / 2.0f, buttons[i].getPosition().y + rectBounds.height / 2.0f);
 	}
 
+	// Initially version 1 is selected
+	buttons[0].setFillColor(sf::Color(200, 200, 200));
 
 }
 
@@ -130,6 +141,7 @@ void ConfigManager::handleMousePress(sf::RenderWindow& mWindow) {
 		}
 	}
 
+	checkVersionClicked(mWindow);
 }
 
 
@@ -148,6 +160,13 @@ void ConfigManager::updateCirclePosition(sf::RenderWindow& mWindow) {
 	pos.x = sf::Mouse::getPosition(mWindow).x;
 	pos.x = std::min((float)(STARTING_X + LINE_WIDTH), pos.x);
 	pos.x = std::max((float)(STARTING_X), pos.x);
+	// Special case for minD and maxD
+	if (clickedCircle == 1) {
+		pos.x = std::min(pos.x, circles[2].getPosition().x);
+	}
+	else if (clickedCircle == 2) {
+		pos.x = std::max(pos.x, circles[1].getPosition().x);
+	}
 	circles[clickedCircle].setPosition(pos);
 
 	float gap = pos.x - STARTING_X;
@@ -186,5 +205,19 @@ void ConfigManager::drawButtons(sf::RenderWindow& mWindow) {
 	for (int i = 0; i < NUM_VERSIONS; i++) {
 		mWindow.draw(buttons[i]);
 		mWindow.draw(buttonTexts[i]);
+	}
+}
+
+void ConfigManager::checkVersionClicked(sf::RenderWindow& mWindow) {
+	for (int i = 0; i < NUM_VERSIONS; i++) {
+		if (mouseInRectangle(mWindow, buttons[i])) {
+			version = versions[i];
+			buttons[i].setFillColor(sf::Color(200, 200, 200));
+			for (int j = 0; j < NUM_VERSIONS; j++) {
+				if (j == i) continue;
+				buttons[j].setFillColor(sf::Color(255, 255, 255));
+			}
+			break;
+		}
 	}
 }

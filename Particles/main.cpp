@@ -47,7 +47,8 @@ void Particles::run()
 		sf::Time deltaTime = clock.restart();
 		processEvents();
 		update();
-		pm->updatePositions(mWindow);
+		sf::Vector2i mousePos = sf::Mouse::getPosition(mWindow);
+		pm->updatePositions(mWindow, mousePos);
 		cm->updateCirclePosition(mWindow);
 		render();
 	}

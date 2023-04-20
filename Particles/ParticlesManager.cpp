@@ -28,13 +28,12 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* con
 
 
 
-void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
+void ParticlesManager::updatePositions(sf::RenderWindow& mWindow, sf::Vector2i &mousePos) {
 	if (paused) return;
 
 	for (int i = 0; i < NUM_PARTICLES; i++) {
-		sf::Vector2f pos1 = particles[i]->getPosition();
-		sf::Vector2i pos2 = sf::Mouse::getPosition(mWindow);
-		float dx = std::abs(pos1.x - pos2.x), dy = std::abs(pos1.y - pos2.y);
+		sf::Vector2f particlePos = particles[i]->getPosition();
+		float dx = std::abs(particlePos.x - mousePos.x), dy = std::abs(particlePos.y - mousePos.y);
 		float d = std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
 		d = std::max(d, cm->minD);
 		d = std::min(d, cm->maxD);
@@ -44,19 +43,28 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow) {
 
 		float tot = dx + dy;
 		// Replace tot with d or vice versa to have different attraction behavior
-		float rX = dx / tot;
-		float rY = dy / tot;
+		float rX;
+		float rY;
+
+		if (cm->version == VER1) {
+			rX = dx / tot;
+			rY = dy / tot;
+		}
+		else if (cm->version == VER2) {
+			rX = dx / d;
+			rY = dy / d;
+		}
 
 		sf::Vector2f movement(0.f, 0.f);
 
-		if (pos1.x > pos2.x) {
+		if (particlePos.x > mousePos.x) {
 			movement.x = -rX * dv;
 		}
 		else {
 			movement.x = rX * dv;
 		}
 
-		if (pos1.y > pos2.y) {
+		if (particlePos.y > mousePos.y) {
 			movement.y = -rY * dv;
 		}
 		else {

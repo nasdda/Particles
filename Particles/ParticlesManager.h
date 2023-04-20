@@ -3,7 +3,7 @@
 #include "ConfigManager.h"
 
 
-#define NUM_PARTICLES 1000
+#define NUM_PARTICLES 1500
 //#define ATTRACTION_MASS 50000
 #define MAX_PARTICLE_MASS 50
 #define MIN_PARTICLE_MASS 20
@@ -15,7 +15,7 @@ public:
 	ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* confManager);
 	float attractVel;
 	bool isPaused();
-	void updatePositions(sf::RenderWindow& mWindow);
+	void updatePositions(sf::RenderWindow& mWindow, sf::Vector2i &mousePos);
 	void drawParticles(sf::RenderWindow& mWindow);
 	void attract(sf::RenderWindow& mWindow);
 	void togglePaused();

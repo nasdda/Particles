@@ -46,9 +46,11 @@ public:
 	void updateCirclePosition(sf::RenderWindow& mWindow);
 	void toggleControls();
 	void setVersion(int ver);
+	void checkVersionClicked(sf::RenderWindow& mWindow);
 	int mouseMass;
 	float minD, maxD;
 	float attractVel;
+	int versions[NUM_VERSIONS];
 	int version;
 private:
 	sf::RectangleShape lines[NUM_OPTIONS];
