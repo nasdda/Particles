@@ -3,7 +3,7 @@
 #include "ConfigManager.h"
 
 
-#define NUM_PARTICLES 1500
+#define NUM_PARTICLES 20000
 //#define ATTRACTION_MASS 50000
 #define MAX_PARTICLE_MASS 50
 #define MIN_PARTICLE_MASS 20
@@ -22,7 +22,7 @@ public:
 private:
 	ConfigManager* cm;
 	bool paused;
-	std::vector<sf::CircleShape*> particles;
+	sf::VertexArray particles = sf::VertexArray(sf::Points, NUM_PARTICLES);
 	std::vector<int> mass;
 	std::vector<sf::Vector2f> velocity;
 	sf::Vector2f attractor;

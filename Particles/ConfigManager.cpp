@@ -68,7 +68,7 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 		lines[i] = sf::RectangleShape(sf::Vector2f(LINE_WIDTH, LINE_HEIGHT));
 		lines[i].setPosition(sf::Vector2f(STARTING_X, i * MARGIN_Y + MARGIN_Y));
 		lines[i].setFillColor(sf::Color(200, 200, 200));
-
+		
 		circles[i] = sf::CircleShape(CIRCLE_RADIUS);
 		circles[i].setPosition(STARTING_X + (ratios[i] * LINE_WIDTH), i * MARGIN_Y + MARGIN_Y + (LINE_HEIGHT / 2));
 		circles[i].setFillColor(sf::Color::White);
