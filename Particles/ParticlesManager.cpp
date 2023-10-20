@@ -1,7 +1,9 @@
 #include <SFML/Graphics.hpp>
-
 #include "ParticlesManager.h"
-
+#include "iostream"
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 
 ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* confManager) {
@@ -13,10 +15,20 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* con
 	/*attractVel = 5.0;*/
 	paused = false;
 
+	sf::Vector2f center = sf::Vector2f(mWindow.getSize().x / 2.0f, mWindow.getSize().y / 2.0f);
+	
+
+
 	for (int i = 0; i < NUM_PARTICLES; i++) {
-		//sf::CircleShape* particle = new sf::CircleShape;
-		mass.push_back(std::max(MIN_PARTICLE_MASS, (rand() % MAX_PARTICLE_MASS)));
-		particles[i].position = sf::Vector2f(rand() % mWindow.getSize().x, rand() % mWindow.getSize().y);
+		mass.push_back(std::max((float)MIN_PARTICLE_MASS, ((float)rand() / RAND_MAX)* MAX_PARTICLE_MASS));
+		
+		// Spawn randomly in a circular fashion
+		float radius = 500 * ((float)rand() / RAND_MAX);
+		double theta = ((double)rand() / RAND_MAX) * 2 * M_PI;
+		float x = center.x + radius * cos(theta);
+		float y = center.y + radius * sin(theta);
+
+		particles[i].position = sf::Vector2f(x, y);
 		particles[i].color = sf::Color::Black;
 		velocity.push_back(sf::Vector2f(0.f, 0.f));
 	}
@@ -29,19 +41,16 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow, sf::Vector2i &
 
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		sf::Vector2f particlePos = particles[i].position;
-		float dx = std::abs(particlePos.x - mousePos.x), dy = std::abs(particlePos.y - mousePos.y);
-		float d = std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
+		float dx = mousePos.x - particlePos.x, dy = mousePos.y - particlePos.y;
+		float d = std::sqrt(dx * dx + dy * dy);
 		d = std::max(d, cm->minD);
 		d = std::min(d, cm->maxD);
-		float F = 0.5 * mass[i] * cm->mouseMass / (d * d);
-		float a = F / mass[i];
-		float dv = a;
+		float a = G * (cm->mouseMass / mass[i]) / (d * d);
 
-		float tot = dx + dy;
+		float tot = abs(dx) + abs(dy);
+		float rX = 0;
+		float rY = 0;
 		// Replace tot with d or vice versa to have different attraction behavior
-		float rX;
-		float rY;
-
 		if (cm->version == VER1) {
 			rX = dx / tot;
 			rY = dy / tot;
@@ -51,24 +60,13 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow, sf::Vector2i &
 			rY = dy / d;
 		}
 
-		sf::Vector2f movement(0.f, 0.f);
+		sf::Vector2f movement(rX * a, rY * a);
 
-		if (particlePos.x > mousePos.x) {
-			movement.x = -rX * dv;
-		}
-		else {
-			movement.x = rX * dv;
-		}
-
-		if (particlePos.y > mousePos.y) {
-			movement.y = -rY * dv;
-		}
-		else {
-			movement.y = rY * dv;
-		}
+		// The more accurate formula, though less interesting visually.
+		//sf::Vector2f movement(dx * a, dy * a);
 
 		velocity[i] += movement;
-	}
+ 	}
 
 
 }
@@ -92,31 +90,13 @@ void ParticlesManager::attract(sf::RenderWindow& mWindow) {
 	if (paused) return;
 
 	for (int i = 0; i < NUM_PARTICLES; i++) {
-		sf::Vector2f movement(0.f, 0.f);
 		sf::Vector2i mosPos = sf::Mouse::getPosition(mWindow);
-
 		sf::Vector2f pos = particles[i].position;
 
-		float dx = std::abs(pos.x - mosPos.x), dy = std::abs(pos.y - mosPos.y);
-		float d = std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
-		float tot = dx + dy;
-		float rX = dx / tot;
-		float rY = dy / tot;
+		float dx = mosPos.x - pos.x, dy = mosPos.y - pos.y;
+		float tot = abs(dx) + abs(dy);
 
-
-		if (particles[i].position.x > mosPos.x) {
-			movement.x = -cm->attractVel * rX;
-		}
-		else {
-			movement.x = cm->attractVel * rX;
-		}
-
-		if (particles[i].position.y > mosPos.y) {
-			movement.y = -cm->attractVel * rY;
-		}
-		else {
-			movement.y = cm->attractVel * rY;
-		}
+		sf::Vector2f movement(dx * cm->attractVel / 100, dy * cm->attractVel / 100);
 
 		particles[i].position += movement;
 	}

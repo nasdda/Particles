@@ -5,8 +5,10 @@
 
 #define NUM_PARTICLES 20000
 //#define ATTRACTION_MASS 50000
-#define MAX_PARTICLE_MASS 50
-#define MIN_PARTICLE_MASS 20
+#define MAX_PARTICLE_MASS 100
+#define MIN_PARTICLE_MASS 10
+
+#define G 5
 
 
 class ParticlesManager
@@ -23,7 +25,7 @@ private:
 	ConfigManager* cm;
 	bool paused;
 	sf::VertexArray particles = sf::VertexArray(sf::Points, NUM_PARTICLES);
-	std::vector<int> mass;
+	std::vector<float> mass;
 	std::vector<sf::Vector2f> velocity;
 	sf::Vector2f attractor;
 };
