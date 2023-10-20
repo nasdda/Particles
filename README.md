@@ -1,4 +1,4 @@
-# Particles Demos
+# Particles Demo
 ## Version 1
 [2,000 Particles](https://www.youtube.com/watch?v=ZhwqpiVJQoY)
 
