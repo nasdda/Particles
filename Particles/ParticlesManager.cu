@@ -11,7 +11,7 @@
 Config* currentConfig;
 
 // CUDA kernel to update particle positions
-__global__ void cudaUpdatePositions(Vertex* position, Vertex* velocity, float* mass, ParticleColor* particleColors, Config* config)
+__global__ void cudaUpdatePositions(Vertex* position, Vertex* velocity, float* mass, short* particleColors, Config* config)
 {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	if (i >= config->N) return;
@@ -33,10 +33,8 @@ __global__ void cudaUpdatePositions(Vertex* position, Vertex* velocity, float* m
 	velocity[i].y += rY * a;
 	position[i].x += velocity[i].x;
 	position[i].y += velocity[i].y;
-
-	float vel = sqrt(velocity[i].x * velocity[i].x + velocity[i].y * velocity[i].y);
-	float velPercent =  fmaxf(vel / 30.f, 0.1f);
-	particleColors[i] = ParticleColor{ 0, 170, 255, (short) (velPercent * 255) };
+	float oPercent = fmaxf(abs(a) / 5.f, 0.15);
+	particleColors[i] = fminf(255, oPercent * 255);
 
 	if (config->attract) {
 		float dx = config->mouseX - position[i].x, dy = config->mouseY - position[i].y;
@@ -59,7 +57,7 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* con
 	cudaMallocManaged(&cudaVelocity, NUM_PARTICLES * sizeof(Vertex));
 	cudaMallocManaged(&mass, NUM_PARTICLES * sizeof(float));
 	cudaMallocManaged(&currentConfig, sizeof(Config));
-	cudaMallocManaged(&particleColors, NUM_PARTICLES * sizeof(ParticleColor));
+	cudaMallocManaged(&particleColors, NUM_PARTICLES * sizeof(short));
 
 	for (int i = 0; i < NUM_PARTICLES; i++) {
 		mass[i] = (std::max((float)MIN_PARTICLE_MASS, ((float)rand() / RAND_MAX) * MAX_PARTICLE_MASS));
@@ -75,7 +73,7 @@ ParticlesManager::ParticlesManager(sf::RenderWindow& mWindow, ConfigManager* con
 
 		cudaPositions[i] = Vertex{ x, y };
 		cudaVelocity[i] = Vertex{ 0.f, 0.f };
-		particleColors[i] = ParticleColor{255, 255, 255, 255};
+		particleColors[i] = 255;
 	}
 }
 
@@ -104,17 +102,14 @@ void ParticlesManager::updatePositions(sf::RenderWindow& mWindow, sf::Vector2i& 
 	cudaUpdatePositions<<<numBlocks, blockSize>>>(cudaPositions, cudaVelocity, mass, particleColors, currentConfig);
 	// Wait for GPU to finish before accessing on host
 	cudaDeviceSynchronize();
-	float vel = 0;
-	for (int i = 0; i < NUM_PARTICLES; i++) {
-		vel = std::max(vel, cudaVelocity[i].x);
-	}
 }
 
 
 void ParticlesManager::drawParticles(sf::RenderWindow& mWindow) {
 	for (int i = 0; i < NUM_PARTICLES; i++) {
-		particles[i].position = sf::Vector2f(cudaPositions[i].x, cudaPositions[i].y);
-		particles[i].color = sf::Color(particleColors[i].R, particleColors[i].G, particleColors[i].B, particleColors[i].O);
+		particles[i].position.x = cudaPositions[i].x;
+		particles[i].position.y = cudaPositions[i].y;
+		particles[i].color = sf::Color(0, 170, 255, particleColors[i]);
 	}
 	mWindow.draw(particles);
 }

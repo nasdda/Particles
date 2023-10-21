@@ -26,13 +26,6 @@ struct Config {
 	float attractVel;
 };
 
-struct ParticleColor {
-	short R;
-	short G;
-	short B;
-	short O;
-};
-
 class ParticlesManager
 {
 public:
@@ -51,7 +44,7 @@ private:
 	sf::Vector2f attractor;
 	Vertex* cudaPositions;
 	Vertex* cudaVelocity;
-	ParticleColor* particleColors;
+	short* particleColors;
 };
 
 
