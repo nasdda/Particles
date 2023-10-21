@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "ParticlesManager.h"
 #include "ConfigManager.h"
+#include "ParticlesManager.cuh"
+
 
 
 class Particles
@@ -11,7 +12,6 @@ public:
 	void run();
 private:
 	void processEvents();
-	void update();
 	void render();
 	void handlePlayerInput(sf::Event event);
 	bool mIsMovingUp = false;
@@ -46,9 +46,8 @@ void Particles::run()
 	{
 		sf::Time deltaTime = clock.restart();
 		processEvents();
-		update();
 		sf::Vector2i mousePos = sf::Mouse::getPosition(mWindow);
-		pm->updatePositions(mWindow, mousePos);
+		pm->updatePositions(mWindow, mousePos, pressed);
 		cm->updateCirclePosition(mWindow);
 		render();
 	}
@@ -87,13 +86,6 @@ void Particles::handlePlayerInput(sf::Event event)
 	}
 }
 
-
-void Particles::update()
-{
-	if (pressed) {
-		pm->attract(mWindow);
-	}
-}
 
 void Particles::render()
 {
