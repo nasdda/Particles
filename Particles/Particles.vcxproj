@@ -144,7 +144,6 @@
     <ClCompile Include="ConfigManager.cpp" />
     <ClCompile Include="ConfigManager.h" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ParticlesManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParticlesManager.cuh" />
