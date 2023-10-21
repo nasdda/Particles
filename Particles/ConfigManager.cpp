@@ -78,7 +78,7 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 
 		sliderTexts[i] = sf::Text();
 		sliderTexts[i].setFont(*font);
-		sliderTexts[i].setFillColor(sf::Color::Black);
+		sliderTexts[i].setFillColor(sf::Color::White);
 		sliderTexts[i].setCharacterSize(CONFIG_FONT_SIZE);
 		sliderTexts[i].setPosition(STARTING_X, i * MARGIN_Y + (MARGIN_Y - 40));
 	}

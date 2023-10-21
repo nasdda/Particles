@@ -89,7 +89,7 @@ void Particles::handlePlayerInput(sf::Event event)
 
 void Particles::render()
 {
-	mWindow.clear(sf::Color::White);
+	mWindow.clear(sf::Color(45, 45, 45));
 	pm->drawParticles(mWindow);
 	cm->drawSliders(mWindow);
 	cm->drawButtons(mWindow);

@@ -8,7 +8,7 @@
 #define MAX_PARTICLE_MASS 100
 #define MIN_PARTICLE_MASS 10
 
-#define G 5
+#define G_CONSTANT 5
 
 
 struct Vertex {
@@ -24,6 +24,13 @@ struct Config {
 	int N;
 	bool attract;
 	float attractVel;
+};
+
+struct ParticleColor {
+	short R;
+	short G;
+	short B;
+	short O;
 };
 
 class ParticlesManager
@@ -44,6 +51,7 @@ private:
 	sf::Vector2f attractor;
 	Vertex* cudaPositions;
 	Vertex* cudaVelocity;
+	ParticleColor* particleColors;
 };
 
 
