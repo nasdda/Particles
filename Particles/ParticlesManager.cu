@@ -23,6 +23,10 @@ __global__ void cudaUpdatePositions(Vertex* position, Vertex* velocity, float* m
 	d = fminf(d, config->maxD);
 	float a = G_CONSTANT * (config->mouseMass / mass[i]) / (d * d);
 
+	// More accurate formula, but less fun visually
+	//velocity[i].x += dx * a / 100.f;
+	//velocity[i].y += dy * a / 100.f;
+
 	float tot = abs(dx) + abs(dy);
 	float rX = 0;
 	float rY = 0;
