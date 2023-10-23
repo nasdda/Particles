@@ -26,9 +26,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ParticlesManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ParticlesManager.cuh">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -39,9 +36,6 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="test.cu">
-      <Filter>Source Files</Filter>
-    </CudaCompile>
     <CudaCompile Include="ParticlesManager.cu">
       <Filter>Source Files</Filter>
     </CudaCompile>

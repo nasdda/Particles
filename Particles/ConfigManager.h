@@ -51,7 +51,7 @@ public:
 	float minD, maxD;
 	float attractVel;
 	int versions[NUM_VERSIONS];
-	int version;
+	short version;
 private:
 	sf::RectangleShape lines[NUM_OPTIONS];
 	sf::RectangleShape buttons[NUM_VERSIONS];

@@ -4,7 +4,6 @@
 #include "ParticlesManager.cuh"
 
 
-
 class Particles
 {
 public:
@@ -89,7 +88,7 @@ void Particles::handlePlayerInput(sf::Event event)
 
 void Particles::render()
 {
-	mWindow.clear(sf::Color(45, 45, 45));
+	mWindow.clear(sf::Color(20, 20, 20));
 	pm->drawParticles(mWindow);
 	cm->drawSliders(mWindow);
 	cm->drawButtons(mWindow);

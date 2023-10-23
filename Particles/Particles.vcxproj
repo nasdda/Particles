@@ -147,14 +147,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParticlesManager.cuh" />
-    <ClInclude Include="ParticlesManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="arial.ttf" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="ParticlesManager.cu" />
-    <CudaCompile Include="test.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

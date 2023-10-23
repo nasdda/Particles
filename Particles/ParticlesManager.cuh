@@ -3,12 +3,16 @@
 #include "ConfigManager.h"
 
 
-#define NUM_PARTICLES 200000
-//#define ATTRACTION_MASS 50000
+#define NUM_PARTICLES 400000
 #define MAX_PARTICLE_MASS 100
 #define MIN_PARTICLE_MASS 10
-
 #define G_CONSTANT 5
+#define T_INCREMENT 0.02f
+// CPU
+#define CPU_THREADS 16
+// GPU
+#define BLOCK_SIZE 256
+#define NUM_BLOCKS ((NUM_PARTICLES + BLOCK_SIZE - 1) / BLOCK_SIZE)
 
 
 struct Vertex {
@@ -24,6 +28,7 @@ struct Config {
 	int N;
 	bool attract;
 	float attractVel;
+	short version;
 };
 
 class ParticlesManager
@@ -44,7 +49,8 @@ private:
 	sf::Vector2f attractor;
 	Vertex* cudaPositions;
 	Vertex* cudaVelocity;
-	short* particleColors;
+	short* particleOpacity;
+	float t; // For calculating particle color 
 };
 
 

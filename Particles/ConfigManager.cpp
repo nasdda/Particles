@@ -3,9 +3,7 @@
 #include <memory>
 #include <string>
 #include <stdexcept>
-
 #include "ConfigManager.h"
-
 
 
 template<typename ... Args>
@@ -19,10 +17,12 @@ std::string string_format(const std::string& format, Args ... args)
 	return std::string(buf.get(), buf.get() + size - 1); // We don't want the '\0' inside
 }
 
+
 int getRatioValue(float ratio, int min, int max) {
 	int add = (max - min) * ratio;
 	return min + add;
 }
+
 
 bool mouseInRectangle(const sf::RenderWindow& window, const sf::RectangleShape& rectangle) {
 	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
@@ -68,7 +68,7 @@ ConfigManager::ConfigManager(sf::RenderWindow& mWindow) {
 		lines[i] = sf::RectangleShape(sf::Vector2f(LINE_WIDTH, LINE_HEIGHT));
 		lines[i].setPosition(sf::Vector2f(STARTING_X, i * MARGIN_Y + MARGIN_Y));
 		lines[i].setFillColor(sf::Color(200, 200, 200));
-		
+
 		circles[i] = sf::CircleShape(CIRCLE_RADIUS);
 		circles[i].setPosition(STARTING_X + (ratios[i] * LINE_WIDTH), i * MARGIN_Y + MARGIN_Y + (LINE_HEIGHT / 2));
 		circles[i].setFillColor(sf::Color::White);
@@ -122,6 +122,7 @@ void ConfigManager::drawSliders(sf::RenderWindow& mWindow) {
 		mWindow.draw(circles[i]);
 	}
 }
+
 
 bool inCircle(sf::CircleShape& circle, sf::Vector2i& mPos) {
 	sf::Vector2f cPos = circle.getPosition();
@@ -191,9 +192,11 @@ void ConfigManager::updateTexts() {
 	sliderTexts[3].setString(string_format("Left-Click Attraction: %.2f", attractVel));
 }
 
+
 void ConfigManager::toggleControls() {
 	hide = !hide;
 }
+
 
 void ConfigManager::setVersion(int ver) {
 	version = ver;
@@ -207,6 +210,7 @@ void ConfigManager::drawButtons(sf::RenderWindow& mWindow) {
 		mWindow.draw(buttonTexts[i]);
 	}
 }
+
 
 void ConfigManager::checkVersionClicked(sf::RenderWindow& mWindow) {
 	for (int i = 0; i < NUM_VERSIONS; i++) {
