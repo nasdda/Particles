@@ -1,7 +1,6 @@
 # Controls
-**SPACE**: Toggle pause and settings.
-
-**LEFT-CLICK (Hold)**: Gather particles towards cursor.
+- **SPACE**: Toggle pause and settings.
+- **LEFT-CLICK (Hold)**: Gather particles towards cursor.
 
 # Demo
 ### Optimized for CPU
