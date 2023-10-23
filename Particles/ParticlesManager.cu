@@ -37,8 +37,8 @@ __global__ void cudaUpdatePositions(Vertex* position, Vertex* velocity, float* m
 	}
 	else {
 		a = G_CONSTANT * (config->mouseMass) / (d * d);
-		velocity[i].x += dx * a / 100.f;
-		velocity[i].y += dy * a / 100.f;
+		velocity[i].x += dx * a / 200.f;
+		velocity[i].y += dy * a / 200.f;
 	}
 
 	position[i].x += velocity[i].x;
@@ -165,7 +165,7 @@ void ParticlesManager::drawParticles(sf::RenderWindow& mWindow) {
 	}
 
 	t += T_INCREMENT;
-	mWindow.draw(particles);
+	mWindow.draw(particles, sf::BlendAdd);
 }
 
 
