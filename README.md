@@ -10,7 +10,7 @@
 [200,000 Particles](https://youtu.be/aPE_fs8Ijts)
 
 ### Parallel processing on both the GPU and CPU
-[400,000 Particles](https://www.youtube.com/watch?v=Z0GVEF4_y-U)
+[400,000 Particles](https://youtu.be/gpc4P4pr_UQ)
 
 ### Some fun patterns
 ![spiral4](https://github.com/nasdda/Particles/assets/36829770/4442b045-d4ed-452f-9df4-31e8734bed89)
